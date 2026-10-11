@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using UserContextExample;
 using UserContextExample.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+app.UseMiddleware<UserContextMiddleware>();
 
 app.MapControllers();
 

@@ -9,8 +9,6 @@ public class ExampleController(ApplicationService application, UserContext userC
     [HttpGet]
     public IActionResult List()
     {
-        userContext.UserId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-        userContext.Roles = User.Claims.Where(c => c.Type == "role").Select(c => c.Value).ToList();
         application.PerformApplicationOperation();
         return Ok();
     }
