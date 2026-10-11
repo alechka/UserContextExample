@@ -4,48 +4,40 @@ namespace UserContextExample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ExampleController(ApplicationService application) : ControllerBase
+public class ExampleController(ApplicationService application, UserContext userContext) : ControllerBase
 {
     [HttpGet]
     public IActionResult List()
     {
-        var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-        var permissions = User.Claims.Where(c => c.Type == "role").Select(c => c.Value).ToList();
-        
-        var userContext = new UserContext
-        {
-            UserId = userId,
-            Roles = permissions
-        };
-
-        application.PerformApplicationOperation(userContext);
-
+        userContext.UserId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
+        userContext.Roles = User.Claims.Where(c => c.Type == "role").Select(c => c.Value).ToList();
+        application.PerformApplicationOperation();
         return Ok();
     }
 }
 
 public class ApplicationService(Layer2Service layer2)
 {
-    public void PerformApplicationOperation(UserContext userContext)
+    public void PerformApplicationOperation()
     {
-        layer2.PerformLayerOperation(userContext);
+        layer2.PerformLayerOperation();
     }
 }
 
 
 public class Layer2Service(Layer3Service layer3)
 {
-   public void PerformLayerOperation(UserContext userContext)
+   public void PerformLayerOperation()
     {
-        layer3.PerformDeepestOperation(userContext);
+        layer3.PerformDeepestOperation();
     }
 }
 
-public class Layer3Service
+public class Layer3Service(UserContext userContext)
 {
-    public void PerformDeepestOperation(UserContext userContext)
+    public void PerformDeepestOperation()
     {
-        // some logic here        
+        _ = userContext;
     }
 }
 

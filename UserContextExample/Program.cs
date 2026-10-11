@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ApplicationService>();
 builder.Services.AddScoped<Layer2Service>();
 builder.Services.AddScoped<Layer3Service>();
+builder.Services.AddScoped<UserContext>();
 
 var app = builder.Build();
 
